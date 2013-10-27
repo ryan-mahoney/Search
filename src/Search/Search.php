@@ -69,4 +69,31 @@ class Search {
 		$deleteParams['id'] = $id;
 		return $this->searchGateway->delete($deleteParams);
 	}
+
+	public function searchPublic ($query) {
+		//apply acl = public
+		
+		//apply type = published
+	}
+
+	public function indexMakeDefault ($id, $type, $title, $description=null, $image=null, $tags=[], $categories=[], $date=null, $dateCreated=null, $dateModified=null, $status='published', $featured='f', $acl=['public'], $urlManager=null, $urlPublic='', $index=false) {
+		$this->index(
+			$id, [
+				'title' => $title,
+				'description' => $description,
+				'image' => $image,
+				'tags' => $tags,
+				'categories' => $categories,
+				'date' => $date,
+				'created_date' => $dateCreated,
+				'modified_date'	=> $dateModified,
+				'status' => $status,
+				'featured' => $featured,
+				'acl' => $acl,
+				'url' => $urlPublic,
+				'url_manager' => $urlManager
+			], $type,
+			$index
+		);
+	}
 }
