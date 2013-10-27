@@ -1,8 +1,8 @@
 {
     "name": "virtuecenter/search",
     "type": "library",
-    "description": "Facilities for indexing and search Lucene / Solr data",
-    "keywords": ["Solr", "Lucene"],
+    "description": "Facilities for indexing and searching using Elasticsearch",
+    "keywords": ["Search", "Elasticsearch"],
     "license": "MIT",
     "authors": [
         {
@@ -14,7 +14,7 @@
     ],
     "require": {
     	"php": ">=5.4.0",
-		"solarium/solarium": "dev-develop"
+		"elasticsearch/elasticsearch": "~0.4"
     },
     "autoload": {
         "psr-0": {"Search": "src/"}
