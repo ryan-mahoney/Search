@@ -67,7 +67,11 @@ class Search {
 		$deleteParams['index'] = $index;
 		$deleteParams['type'] = $type;
 		$deleteParams['id'] = $id;
-		return $this->searchGateway->delete($deleteParams);
+		$response = false;
+		try {
+			$response = $this->searchGateway->delete($deleteParams);
+		} catch (\Exception $e) {}
+		return $response;
 	}
 
 	public function searchPublic ($query) {
