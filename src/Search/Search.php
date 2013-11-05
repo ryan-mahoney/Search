@@ -56,6 +56,7 @@ class Search {
 		} else {
 			$searchParams['body']['query'] = $query;
 		}
+		//$searchParams['body']['highlight']['fields']['title' => []];
 		return $this->searchGateway->search($searchParams);
 	}
 
@@ -80,8 +81,8 @@ class Search {
 		//apply type = published
 	}
 
-	public function indexMakeDefault ($id, $type, $title, $description=null, $image=null, $tags=[], $categories=[], $date=null, $dateCreated=null, $dateModified=null, $status='published', $featured='f', $acl=['public'], $urlManager=null, $urlPublic='', $index=false) {
-		$this->index(
+	public function indexToDefault ($id, $type, $title, $description=null, $image=null, $tags=[], $categories=[], $date=null, $dateCreated=null, $dateModified=null, $status='published', $featured='f', $acl=['public'], $urlManager=null, $urlPublic='', $index=false) {
+		return $this->index(
 			$id, [
 				'title' => $title,
 				'description' => $description,
@@ -96,8 +97,100 @@ class Search {
 				'acl' => $acl,
 				'url' => $urlPublic,
 				'url_manager' => $urlManager
-			], $type,
+			], 
+			$type,
 			$index
 		);
+	}
+
+	public function indexCreateDefault ($index=false) {
+		if ($index === false) {
+			$index = $this->root;
+		}
+		$indexParams['index']  = $index;
+		$indexParams['body']['settings']['number_of_shards'] = 5;
+		$indexParams['body']['settings']['number_of_replicas'] = 1;
+		$indexParams['body']['mappings']['my_type'] = [
+    		'_source' => [
+        		'enabled' => true
+    		],
+    		'properties' => [
+        		'title' => [
+            		'type' => 'string',
+            		'store' => 'yes',
+                	'index' => 'analyzed',
+                	'boost' => 2,
+                	'index_options' => 'offsets'
+        		],
+        		'description' => [
+            		'type' => 'string',
+            		'store' => 'yes',
+                	'index' => 'analyzed'
+        		],
+        		'image' => [
+            		'type' => 'string',
+            		'store' => 'no',
+                	'index' => 'no'
+        		],
+        		'tags' => [
+					'type' => 'string', 
+					'index_name' => 'tag',
+					'store' => 'yes',
+					'index' => 'analyzed',
+					'boost' => 2
+        		],
+        		'categories' => [
+					'type' => 'string', 
+					'index_name' => 'category',
+					'store' => 'yes',
+					'index' => 'not_analyzed'
+        		],
+        		'date' => [
+        			'type'  => 'date',
+        			'format' => 'date_time',
+        			'index' => 'analyzed',
+        			'store' => 'no'
+        		],
+        		'created_date' => [
+        			'type'  => 'date',
+        			'format' => 'date_time',
+        			'index' => 'analyzed',
+        			'store' => 'no'
+        		],
+        		'modified_date' => [
+        			'type'  => 'date',
+        			'format' => 'date_time',
+        			'index' => 'analyzed',
+        			'store' => 'no'
+        		],
+        		'status' => [
+        			'type' => 'string',
+        			'index' => 'not_analyzed',
+        			'store' => 'no'
+        		],
+        		'featured' => [
+        			'type' => 'string',
+        			'index' => 'not_analyzed',
+        			'store' => 'no'
+        		],
+        		'acl' => [
+					'type' => 'string', 
+					'store' => 'no',
+					'index' => 'not_analyzed'
+        		],
+        		'url' => [
+        			'type' => 'string',
+        			'index' => 'no',
+        			'store' => 'no'
+        		],
+        		'url_manager' => [
+        			'type' => 'string',
+        			'index' => 'no',
+        			'store' => 'no'
+        		]
+    		]
+		];
+
+		$this->searchGateway->indices()->create($indexParams);
 	}
 }
