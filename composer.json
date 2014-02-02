@@ -1,14 +1,14 @@
 {
-    "name": "virtuecenter/search",
+    "name": "opine/search",
     "type": "library",
-    "description": "Facilities for indexing and searching using Elasticsearch",
+    "description": "Service for indexing and searching using Elasticsearch",
     "keywords": ["Search", "Elasticsearch"],
     "license": "MIT",
     "authors": [
         {
             "name": "Ryan Mahoney",
             "email": "ryan@virtuecenter.com",
-            "homepage": "http://www.virtuecenter.com",
+            "homepage": "http://opine-php.org",
             "role": "Developer"
         }
     ],
@@ -17,6 +17,6 @@
 		"elasticsearch/elasticsearch": "~0.4"
     },
     "autoload": {
-        "psr-0": {"Search": "src/"}
+        "psr-4": {"Opine\\": "src/"}
     }
 }

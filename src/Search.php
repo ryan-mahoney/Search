@@ -1,6 +1,6 @@
 <?php
 /**
- * virtuecenter\search
+ * Opine\Search
  *
  * Copyright (c)2013 Ryan Mahoney, https://github.com/virtuecenter <ryan@virtuecenter.com>
  *
@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace Search;
+namespace Opine;
 
 class Search {
 	private $searchGateway;
