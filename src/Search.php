@@ -30,7 +30,7 @@ class Search {
 
     public function __construct ($searchGateway, $root) {
         $this->searchGateway = $searchGateway;
-        $this->root = trim(str_replace('/', '__', $root), '__');
+        $this->root = strtolower(trim(str_replace('/', '__', $root), '__'));
     }
 
     public function index ($id, $body, $type=null, $index=false) {
