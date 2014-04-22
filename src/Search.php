@@ -45,19 +45,25 @@ class Search {
         return $this->searchGateway->index($params);
     }
 
-    public function search ($query, $type=null, $index=false) {
+    public function search ($query, $type=null, $limit=20, $offset=0, $index=false) {
         if ($index === false) {
             $index = $this->root;
         }
         $searchParams['index'] = $index;
-        $searchParams['type'] = $type;
+        
+        if (!empty($type)) {
+            $searchParams['filter'] = ['and' => ['term' => ['type' => $type]]];
+        }
+
+        $searchParams['from'] = $offset;
+        $searchParams['size'] = $limit;
+        
         if (is_string($query)) {
             $searchParams['body']['query']['query_string']['query'] = $query;
         } else {
             $searchParams['body']['query'] = $query;
         }
         //$searchParams['body']['highlight']['fields']['title' => []];
-        echo 'X';
         return $this->searchGateway->search($searchParams);
     }
 
