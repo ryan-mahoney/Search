@@ -57,6 +57,7 @@ class Search {
             $searchParams['body']['query'] = $query;
         }
         //$searchParams['body']['highlight']['fields']['title' => []];
+        echo 'X';
         return $this->searchGateway->search($searchParams);
     }
 
