@@ -14,7 +14,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "elasticsearch/elasticsearch": "v1.0"
+        "elasticsearch/elasticsearch": "v1.0.2"
     },
     "autoload": {
         "psr-4": {"Opine\\": "src/"}
