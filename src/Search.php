@@ -28,7 +28,7 @@ class Search {
     private $searchGateway;
     private $root;
 
-    public function __construct ($searchGateway, $root) {
+    public function __construct ($root, $searchGateway) {
         $this->searchGateway = $searchGateway;
         $this->root = strtolower(trim(str_replace('/', '__', $root), '__'));
     }
