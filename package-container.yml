@@ -1,0 +1,6 @@
+services:
+    searchGateway:
+        class:     'Elasticsearch\Client'
+    search:
+        class:     'Opine\Search'
+        arguments: ['%root%', '@searchGateway']
