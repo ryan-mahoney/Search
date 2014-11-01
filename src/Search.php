@@ -53,7 +53,7 @@ class Search {
         $searchParams['type'] = $type;
         
         if (!empty($collection)) {
-            $searchParams['filter'] = ['and' => ['term' => ['collectionf' => $collection]]];
+            $searchParams['filter'] = ['and' => ['term' => ['collection' => $collection]]];
         }
 
         $searchParams['from'] = $offset;
@@ -65,7 +65,8 @@ class Search {
             $searchParams['body']['query'] = $query;
         }
         //$searchParams['body']['highlight']['fields']['title' => []];
-        return $this->searchGateway->search($searchParams);
+        $result = $this->searchGateway->search($searchParams);
+        return $result;
     }
 
     public function delete ($id, $index=false, $type='default') {
