@@ -1,14 +1,18 @@
 <?php
 namespace Opine;
 
-class SearchTest extends \PHPUnit_Framework_TestCase {
-    private $db;
+use PHPUnit_Framework_TestCase;
+use Opine\Container\Service as Container;
+use Opine\Config\Service as Config;
+
+class SearchTest extends PHPUnit_Framework_TestCase {
 
     public function setup () {
         date_default_timezone_set('UTC');
-        $root = __DIR__;
-        $container = new Container($root, $root . '/container.yml');
-        $this->db = $container->db;
+        $root = __DIR__ . '/../public';
+        $config = new Config($root);
+        $config->cacheSet();
+        $container = Container::instance($root, $config, $root . '/../container.yml');
     }
 
     public function testSample () {
