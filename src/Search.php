@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,16 +24,19 @@
  */
 namespace Opine;
 
-class Search {
+class Search
+{
     private $searchGateway;
     private $root;
 
-    public function __construct ($root, $searchGateway) {
+    public function __construct($root, $searchGateway)
+    {
         $this->searchGateway = $searchGateway;
         $this->root = strtolower(trim(str_replace('/', '__', $root), '__'));
     }
 
-    public function index ($id, $body, $index=false, $type='default') {
+    public function index($id, $body, $index = false, $type = 'default')
+    {
         if ($index === false) {
             $index = $this->root;
         }
@@ -41,24 +44,26 @@ class Search {
         $params['body'] = $body;
         $params['index'] = $index;
         $params['type'] = $type;
-        $params['id'] = (string)$id;
+        $params['id'] = (string) $id;
+
         return $this->searchGateway->index($params);
     }
 
-    public function search ($query, $collection=null, $limit=20, $offset=0, $index=false, $type='default') {
+    public function search($query, $collection = null, $limit = 20, $offset = 0, $index = false, $type = 'default')
+    {
         if ($index === false) {
             $index = $this->root;
         }
         $searchParams['index'] = $index;
         $searchParams['type'] = $type;
-        
+
         if (!empty($collection)) {
             $searchParams['filter'] = ['and' => ['term' => ['collection' => $collection]]];
         }
 
         $searchParams['from'] = $offset;
         $searchParams['size'] = $limit;
-        
+
         if (is_string($query)) {
             $searchParams['body']['query']['query_string']['query'] = $query;
         } else {
@@ -66,10 +71,12 @@ class Search {
         }
         //$searchParams['body']['highlight']['fields']['title' => []];
         $result = $this->searchGateway->search($searchParams);
+
         return $result;
     }
 
-    public function delete ($id, $index=false, $type='default') {
+    public function delete($id, $index = false, $type = 'default')
+    {
         if ($index === false) {
             $index = $this->root;
         }
@@ -80,13 +87,16 @@ class Search {
         $response = false;
         try {
             $response = $this->searchGateway->delete($deleteParams);
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
+
         return $response;
     }
 
-    public function indexToDefault ($id, $collection, $title, $description=null, $image=null, Array $tags=[], Array $categories=[], $date=null, $dateCreated=null, $dateModified=null, $status='published', $featured='f', Array $acl=['public'], $urlManager='', $urlPublic='', $language='', $index=false, $type='default') {
+    public function indexToDefault($id, $collection, $title, $description = null, $image = null, Array $tags = [], Array $categories = [], $date = null, $dateCreated = null, $dateModified = null, $status = 'published', $featured = 'f', Array $acl = ['public'], $urlManager = '', $urlPublic = '', $language = '', $index = false, $type = 'default')
+    {
         return $this->index(
-            $id, 
+            $id,
             [
                 'collection'    => $collection,
                 'title'         => $title,
@@ -109,7 +119,8 @@ class Search {
         );
     }
 
-    public function indexCreateDefault ($index=false, $type='default') {
+    public function indexCreateDefault($index = false, $type = 'default')
+    {
         if ($index === false) {
             $index = $this->root;
         }
@@ -118,99 +129,100 @@ class Search {
         $indexParams['body']['settings']['number_of_replicas'] = 1;
         $indexParams['body']['mappings'][$type] = [
             '_source' => [
-                'enabled' => true
+                'enabled' => true,
             ],
             'properties' => [
                 'collection' => [
                     'type' => 'string',
                     'store' => 'yes',
-                    'index' => 'analyzed'
+                    'index' => 'analyzed',
                 ],
                 'title' => [
                     'type' => 'string',
                     'store' => 'yes',
                     'index' => 'analyzed',
                     'boost' => 2,
-                    'index_options' => 'offsets'
+                    'index_options' => 'offsets',
                 ],
                 'description' => [
                     'type' => 'string',
                     'store' => 'yes',
-                    'index' => 'analyzed'
+                    'index' => 'analyzed',
                 ],
                 'image' => [
                     'type' => 'object',
                     'store' => 'no',
-                    'index' => 'no'
+                    'index' => 'no',
                 ],
                 'tags' => [
-                    'type' => 'array', 
+                    'type' => 'array',
                     'index_name' => 'tag',
                     'store' => 'yes',
                     'index' => 'analyzed',
-                    'boost' => 2
+                    'boost' => 2,
                 ],
                 'categories' => [
-                    'type' => 'array', 
+                    'type' => 'array',
                     'index_name' => 'category',
                     'store' => 'yes',
-                    'index' => 'not_analyzed'
+                    'index' => 'not_analyzed',
                 ],
                 'date' => [
                     'type'  => 'date',
                     'format' => 'yyyy/MM/dd HH:mm:ss',
                     'index' => 'analyzed',
-                    'store' => 'no'
+                    'store' => 'no',
                 ],
                 'created_date' => [
                     'type'  => 'date',
                     'format' => 'yyyy/MM/dd HH:mm:ss',
                     'index' => 'analyzed',
-                    'store' => 'no'
+                    'store' => 'no',
                 ],
                 'modified_date' => [
                     'type'  => 'date',
                     'format' => 'yyyy/MM/dd HH:mm:ss',
                     'index' => 'analyzed',
-                    'store' => 'no'
+                    'store' => 'no',
                 ],
                 'status' => [
                     'type' => 'string',
                     'index' => 'not_analyzed',
-                    'store' => 'no'
+                    'store' => 'no',
                 ],
                 'featured' => [
                     'type' => 'string',
                     'index' => 'not_analyzed',
-                    'store' => 'no'
+                    'store' => 'no',
                 ],
                 'acl' => [
-                    'type' => 'array', 
+                    'type' => 'array',
                     'store' => 'no',
-                    'index' => 'not_analyzed'
+                    'index' => 'not_analyzed',
                 ],
                 'url' => [
                     'type' => 'string',
                     'index' => 'no',
-                    'store' => 'no'
+                    'store' => 'no',
                 ],
                 'url_manager' => [
                     'type' => 'string',
                     'index' => 'no',
-                    'store' => 'no'
+                    'store' => 'no',
                 ],
                 'language' => [
                     'type' => 'string',
                     'index' => 'not_analyzed',
-                    'store' => 'no'
-                ]
-            ]
+                    'store' => 'no',
+                ],
+            ],
         ];
 
         $this->searchGateway->indices()->create($indexParams);
     }
 
-    public function indexDrop ($index=false) {
+    public function indexDrop($index = false)
+    {
         if ($index === false) {
             $index = $this->root;
         }
@@ -218,7 +230,8 @@ class Search {
         $this->searchGateway->indices()->delete($deleteParams);
     }
 
-    public function collectionDrop ($index=false, $type=false, $collection) {
+    public function collectionDrop($index = false, $type = false, $collection)
+    {
         if ($index === false) {
             $index = $this->root;
         }
