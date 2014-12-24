@@ -1,5 +1,5 @@
 {
-    "name": "opine\/search",
+    "name": "opine/search",
     "type": "library",
     "description": "Service for indexing and searching using Elasticsearch",
     "keywords": [
@@ -11,17 +11,17 @@
         {
             "name": "Ryan Mahoney",
             "email": "ryan@virtuecenter.com",
-            "homepage": "http:\/\/opine-php.org",
+            "homepage": "http://opine-php.org",
             "role": "Developer"
         }
     ],
     "require": {
         "php": ">=5.4.0",
-        "elasticsearch\/elasticsearch": "v1.0.2"
+        "elasticsearch/elasticsearch": "v1.0.2"
     },
     "autoload": {
         "psr-4": {
-            "Opine\\": "src\/"
+            "Opine\\": "src/"
         }
     }
 }
