@@ -2,7 +2,7 @@ services:
     cache:
         class:     'Opine\Cache'
     topic:
-        class:     'Opine\Topic'
+        class:     'Opine\PubSub\Topic'
         arguments: ['@container']
     config:
         class:     'Opine\Config'
