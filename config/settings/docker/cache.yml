@@ -1,0 +1,3 @@
+settings:
+    host: memcached
+    port: 11211

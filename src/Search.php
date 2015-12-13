@@ -27,18 +27,18 @@ namespace Opine;
 class Search
 {
     private $searchGateway;
-    private $root;
+    private $index;
 
-    public function __construct($root, $searchGateway)
+    public function __construct($index, $searchGateway)
     {
         $this->searchGateway = $searchGateway;
-        $this->root = strtolower(trim(str_replace('/', '__', $root), '__'));
+        $this->index = strtolower(trim(str_replace(['/', '..'], '__', $index), '__'));
     }
 
     public function index($id, $body, $index = false, $type = 'default')
     {
         if ($index === false) {
-            $index = $this->root;
+            $index = $this->index;
         }
         $params = [];
         $params['body'] = $body;
@@ -52,7 +52,7 @@ class Search
     public function search($query, $collection = null, $limit = 20, $offset = 0, $index = false, $type = 'default')
     {
         if ($index === false) {
-            $index = $this->root;
+            $index = $this->index;
         }
         $searchParams['index'] = $index;
         $searchParams['type'] = $type;
@@ -70,6 +70,7 @@ class Search
             $searchParams['body']['query'] = $query;
         }
         //$searchParams['body']['highlight']['fields']['title' => []];
+
         $result = $this->searchGateway->search($searchParams);
 
         return $result;
@@ -78,7 +79,7 @@ class Search
     public function delete($id, $index = false, $type = 'default')
     {
         if ($index === false) {
-            $index = $this->root;
+            $index = $this->index;
         }
         $deleteParams = [];
         $deleteParams['index'] = $index;
@@ -122,7 +123,7 @@ class Search
     public function indexCreateDefault($index = false, $type = 'default')
     {
         if ($index === false) {
-            $index = $this->root;
+            $index = $this->index;
         }
         $indexParams['index']  = $index;
         $indexParams['body']['settings']['number_of_shards'] = 5;
@@ -155,14 +156,14 @@ class Search
                     'index' => 'no',
                 ],
                 'tags' => [
-                    'type' => 'array',
+                    'type' => 'string',
                     'index_name' => 'tag',
                     'store' => 'yes',
                     'index' => 'analyzed',
                     'boost' => 2,
                 ],
                 'categories' => [
-                    'type' => 'array',
+                    'type' => 'string',
                     'index_name' => 'category',
                     'store' => 'yes',
                     'index' => 'not_analyzed',
@@ -196,7 +197,7 @@ class Search
                     'store' => 'no',
                 ],
                 'acl' => [
-                    'type' => 'array',
+                    'type' => 'string',
                     'store' => 'no',
                     'index' => 'not_analyzed',
                 ],
@@ -218,22 +219,15 @@ class Search
             ],
         ];
 
-        $this->searchGateway->indices()->create($indexParams);
+        return $this->searchGateway->indices()->create($indexParams);
     }
 
     public function indexDrop($index = false)
     {
         if ($index === false) {
-            $index = $this->root;
+            $index = $this->index;
         }
         $deleteParams = ['index' => $index];
-        $this->searchGateway->indices()->delete($deleteParams);
-    }
-
-    public function collectionDrop($index = false, $type = false, $collection)
-    {
-        if ($index === false) {
-            $index = $this->root;
-        }
+        return $this->searchGateway->indices()->delete($deleteParams);
     }
 }

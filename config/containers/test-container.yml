@@ -1,12 +1,4 @@
-services:
-    cache:
-        class:     'Opine\Cache'
-    topic:
-        class:     'Opine\PubSub\Topic'
-        arguments: ['@container']
-    config:
-        class:     'Opine\Config'
-        arguments: ['%root%', '@cache']
-    db:
-        class:     'Opine\Mongo'
-        arguments: ['@config', '@topic']
+imports:
+    - package-container.yml
+    - ../../vendor/opine/cache/config/containers/package-container.yml
+    - ../../vendor/opine/config/config/containers/package-container.yml

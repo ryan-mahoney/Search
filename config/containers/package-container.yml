@@ -1,6 +1,7 @@
 services:
     searchGateway:
-        class:     'Elasticsearch\Client'
+        class:     Elasticsearch\Client
+        arguments: [config.search]
     search:
-        class:     'Opine\Search'
-        arguments: ['%root%', '@searchGateway']
+        class:     Opine\Search
+        arguments: [%root%, @searchGateway]
